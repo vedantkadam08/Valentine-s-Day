@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Favorite: Shone</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pink: #ff75c3;
+            --purple: #9b5de5;
+            --dark-pink: #d81b60;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--pink), var(--purple));
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* --- COVER POLAROID --- */
+        #cover-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1a1a1a;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 1.2s cubic-bezier(0.7, 0, 0.3, 1);
+            transform-origin: top;
+        }
+
+        .polaroid {
+            background: white;
+            padding: 15px 15px 50px 15px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            transform: rotate(-2deg);
+            cursor: pointer;
+            transition: 0.4s;
+            text-align: center;
+        }
+
+        .polaroid:hover { transform: rotate(0deg) scale(1.05); }
+
+        .polaroid img {
+            width: 280px;
+            height: 320px;
+            object-fit: cover;
+            border: 1px solid #ddd;
+        }
+
+        .polaroid p {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            margin: 15px 0 0 0;
+            color: #333;
+        }
+
+        .reveal-active { transform: translateY(-100%) rotateX(10deg); }
+
+        /* --- MAIN CONTENT --- */
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        h1 { font-family: 'Dancing Script', cursive; font-size: 4.5rem; margin-bottom: 10px; }
+
+        .counter-container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            padding: 25px;
+            border-radius: 30px;
+            margin: 30px 0;
+            border: 1px solid rgba(255,255,255,0.2);
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .timer {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .timer-unit span { display: block; font-size: 2rem; font-weight: 800; }
+
+        /* --- MUSIC PLAYER (BOTTOM LEFT) --- */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 10px 20px 10px 10px;
+            border-radius: 50px;
+            backdrop-filter: blur(5px);
+            z-index: 900;
+        }
+
+        .cd-container {
+            width: 50px;
+            height: 50px;
+            background: #333;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid white;
+            margin-right: 15px;
+            overflow: hidden;
+            animation: spin 3s linear infinite;
+            animation-play-state: paused;
+        }
+
+        .cd-inner {
+            width: 15px;
+            height: 15px;
+            background: white;
+            border-radius: 50%;
+            border: 2px solid #333;
+        }
+
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* --- LOVE NOTE SECTION --- */
+        .love-note {
+            background: white;
+            color: #4a4a4a;
+            max-width: 500px;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 40px 0;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .hidden-text { display: none; margin-top: 15px; line-height: 1.6; }
+
+        /* --- FLOATING HEARTS --- */
+        .heart {
+            position: fixed;
+            bottom: -50px;
+            pointer-events: none;
+            animation: float 5s linear infinite;
+            font-size: 20px;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="cover-overlay" onclick="startEverything()">
+        <div class="polaroid">
+            <img src="https://via.placeholder.com/300x350?text=Us+Forever" alt="Our Picture">
+            <p>For Shone, My Everything</p>
+            <small style="color: #888;">(Click to open)</small>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <h1>Happy Valentine's Day!</h1>
+        <p style="font-size: 1.2rem;">My dearest <strong>Babde</strong>, we've been side-by-side for:</p>
+
+        <div class="counter-container">
+            <div class="timer">
+                <div class="timer-unit"><span id="days">0</span> Days</div>
+                <div class="timer-unit"><span id="hours">0</span> Hrs</div>
+                <div class="timer-unit"><span id="mins">0</span> Mins</div>
+                <div class="timer-unit"><span id="secs">0</span> Secs</div>
+            </div>
+        </div>
+
+        <div class="love-note" onclick="toggleNote()">
+            <h3 style="margin:0; color: var(--dark-pink);">💌 A Secret Note for Gubbu...</h3>
+            <p id="note-instruction" style="font-size: 0.8rem;">(Click to read)</p>
+            <div id="secret-content" class="hidden-text">
+                "Shone, since 2/10/2024, my life has been a dream. You are my Babde, my Gubbu, and my best friend. 
+                I promise to love you more with every second that ticks by on that counter above. 
+                Happy 2nd Valentine's Day!"
+            </div>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <p>Our Second Valentine's Day • 2026</p>
+        </div>
+    </div>
+
+    <div class="music-player">
+        <div class="cd-container" id="cd">
+            <div class="cd-inner"></div>
+        </div>
+        <div style="font-size: 0.8rem;">
+            <div id="song-title">Our Song</div>
+            <button onclick="toggleMusic()" style="background:none; border: 1px solid white; color:white; border-radius:10px; cursor:pointer; font-size:0.7rem;">Play/Pause</button>
+        </div>
+    </div>
+
+    <audio id="bg-music" loop>
+        <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mp3">
+    </audio>
+
+    <script>
+        const music = document.getElementById('bg-music');
+        const cd = document.getElementById('cd');
+
+        // Start Page and Music
+        function startEverything() {
+            document.getElementById('cover-overlay').classList.add('reveal-active');
+            music.play();
+            cd.style.animationPlayState = 'running';
+        }
+
+        // Music Control
+        function toggleMusic() {
+            if (music.paused) {
+                music.play();
+                cd.style.animationPlayState = 'running';
+            } else {
+                music.pause();
+                cd.style.animationPlayState = 'paused';
+            }
+        }
+
+        // Timer Logic (2nd Oct 2024)
+        const startDate = new Date("2024-10-02T00:00:00").getTime();
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = now - startDate;
+            document.getElementById("days").innerText = Math.floor(diff / 86400000);
+            document.getElementById("hours").innerText = Math.floor((diff % 86400000) / 3600000);
+            document.getElementById("mins").innerText = Math.floor((diff % 3600000) / 60000);
+            document.getElementById("secs").innerText = Math.floor((diff % 60000) / 1000);
+        }, 1000);
+
+        // Secret Note Toggle
+        function toggleNote() {
+            const content = document.getElementById('secret-content');
+            const instr = document.getElementById('note-instruction');
+            content.style.display = (content.style.display === 'block') ? 'none' : 'block';
+            instr.style.display = (content.style.display === 'block') ? 'none' : 'block';
+        }
+
+        // Floating Hearts
+        setInterval(() => {
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+            heart.innerHTML = ["❤️", "💖", "💕", "🌸"][Math.floor(Math.random() * 4)];
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.fontSize = (Math.random() * 20 + 10) + "px";
+            heart.style.animationDuration = (Math.random() * 2 + 3) + "s";
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }, 400);
+    </script>
+</body>
+</html>
