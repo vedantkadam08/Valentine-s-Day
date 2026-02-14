@@ -167,55 +167,71 @@
             100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
         }
 
-        /* --- NEW ADDITIONS: CONVEYOR BELT --- */
+        /* --- NEW: CONVEYOR BELT STYLE --- */
         .conveyor-belt {
             position: fixed;
             width: 100%;
             overflow: hidden;
             white-space: nowrap;
             z-index: 1;
-            display: none; /* Revealed by JS */
-            opacity: 0.6;
+            display: none; 
+            opacity: 0.7;
         }
         .belt-top { top: 10px; }
-        .belt-bottom { bottom: 80px; }
+        .belt-bottom { bottom: 10px; }
+        .track { display: inline-flex; animation: slide 45s linear infinite; }
+        .track img { height: 100px; margin: 0 10px; border: 3px solid white; border-radius: 8px; }
+        @keyframes slide { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-        .track {
-            display: inline-flex;
-            animation: slide 40s linear infinite;
-        }
-        .track img {
-            height: 120px;
-            width: auto;
-            margin: 0 10px;
-            border: 4px solid white;
-            border-radius: 10px;
-        }
-        @keyframes slide {
-            from { transform: translateX(0); }
-            to { transform: translateX(-50%); }
-        }
-
-        /* --- NEW ADDITIONS: VIDEO GALLERY --- */
-        .video-gallery {
-            display: none; /* Revealed by JS */
-            width: 90%;
-            max-width: 900px;
-            margin: 50px auto;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            padding-bottom: 100px;
-        }
-        .video-card {
-            background: white;
-            padding: 10px;
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-        .video-card video {
+        /* --- NEW: VIDEO SUBPAGE STYLE --- */
+        #video-subpage {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            border-radius: 10px;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto;
+            padding: 40px 0;
         }
+        .close-btn {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: white;
+            z-index: 2001;
+        }
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            width: 90%;
+            max-width: 1200px;
+            margin-top: 50px;
+        }
+        .video-card { background: #222; padding: 10px; border-radius: 15px; }
+        .video-card video { width: 100%; border-radius: 10px; }
+        .video-btn {
+            background: white;
+            color: var(--dark-pink);
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            border: none;
+            font-size: 1.1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: 0.3s;
+        }
+        .video-btn:hover { transform: scale(1.1); background: var(--pink); color: white; }
+
     </style>
 </head>
 <body>
@@ -258,17 +274,9 @@
             </div>
         </div>
 
-        <div class="video-gallery" id="vid-gallery">
-            <div class="video-card"><video src="video/vid1.mp4" controls></video></div>
-            <div class="video-card"><video src="video/vid2.mp4" controls></video></div>
-            <div class="video-card"><video src="video/vid3.mp4" controls></video></div>
-            <div class="video-card"><video src="video/vid4.mp4" controls></video></div>
-            <div class="video-card"><video src="video/vid5.mp4" controls></video></div>
-            <div class="video-card"><video src="video/vid6.mp4" controls></video></div>
-            <div class="video-card"><video src="video/vid7.mp4" controls></video></div>
-        </div>
+        <button class="video-btn" onclick="openVideos()">🎥 Our Video Moments</button>
 
-        <div style="margin-top: 20px;">
+        <div style="margin-top: 40px;">
             <p>Our Second Valentine's Day • 2026</p>
         </div>
     </div>
@@ -277,6 +285,20 @@
         <div class="track" style="animation-direction: reverse;">
             <img src="image/pic13.jpg"><img src="image/pic14.jpg"><img src="image/pic15.jpg"><img src="image/pic16.jpg"><img src="image/pic17.jpg"><img src="image/pic18.jpg"><img src="image/pic19.jpg"><img src="image/pic20.jpg"><img src="image/pic21.jpg"><img src="image/pic22.jpg"><img src="image/pic23.jpg"><img src="image/pic24.jpg">
             <img src="image/pic13.jpg"><img src="image/pic14.jpg"><img src="image/pic15.jpg"><img src="image/pic16.jpg"><img src="image/pic17.jpg"><img src="image/pic18.jpg"><img src="image/pic19.jpg"><img src="image/pic20.jpg"><img src="image/pic21.jpg"><img src="image/pic22.jpg"><img src="image/pic23.jpg"><img src="image/pic24.jpg">
+        </div>
+    </div>
+
+    <div id="video-subpage">
+        <span class="close-btn" onclick="closeVideos()">&times; Close</span>
+        <h2 style="font-family: 'Dancing Script'; font-size: 3.5rem; color: white;">Our Memories</h2>
+        <div class="video-grid">
+            <div class="video-card"><video src="video/vid1.mp4" controls></video></div>
+            <div class="video-card"><video src="video/vid2.mp4" controls></video></div>
+            <div class="video-card"><video src="video/vid3.mp4" controls></video></div>
+            <div class="video-card"><video src="video/vid4.mp4" controls></video></div>
+            <div class="video-card"><video src="video/vid5.mp4" controls></video></div>
+            <div class="video-card"><video src="video/vid6.mp4" controls></video></div>
+            <div class="video-card"><video src="video/vid7.mp4" controls></video></div>
         </div>
     </div>
 
@@ -298,19 +320,30 @@
         const music = document.getElementById('bg-music');
         const cd = document.getElementById('cd');
 
-        // Start Page and Music
         function startEverything() {
             document.getElementById('cover-overlay').classList.add('reveal-active');
             music.play();
             cd.style.animationPlayState = 'running';
             
-            // NEW: Show conveyor belts and videos after clicking
+            // Show belts
             document.getElementById('top-belt').style.display = 'block';
             document.getElementById('bottom-belt').style.display = 'block';
-            document.getElementById('vid-gallery').style.display = 'grid';
         }
 
-        // Music Control
+        // VIDEO SUBPAGE LOGIC
+        function openVideos() {
+            document.getElementById('video-subpage').style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Stop background scrolling
+        }
+
+        function closeVideos() {
+            document.getElementById('video-subpage').style.display = 'none';
+            document.body.style.overflow = 'auto'; // Re-enable background scrolling
+            // Optional: Pause all videos when closing
+            const vids = document.querySelectorAll('#video-subpage video');
+            vids.forEach(v => v.pause());
+        }
+
         function toggleMusic() {
             if (music.paused) {
                 music.play();
@@ -321,7 +354,6 @@
             }
         }
 
-        // Timer Logic (2nd Oct 2024)
         const startDate = new Date("2024-10-02T00:00:00").getTime();
         setInterval(() => {
             const now = new Date().getTime();
@@ -332,7 +364,6 @@
             document.getElementById("secs").innerText = Math.floor((diff % 60000) / 1000);
         }, 1000);
 
-        // Secret Note Toggle
         function toggleNote() {
             const content = document.getElementById('secret-content');
             const instr = document.getElementById('note-instruction');
@@ -340,7 +371,6 @@
             instr.style.display = (content.style.display === 'block') ? 'none' : 'block';
         }
 
-        // Floating Hearts
         setInterval(() => {
             const heart = document.createElement("div");
             heart.classList.add("heart");
