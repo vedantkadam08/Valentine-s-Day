@@ -73,6 +73,8 @@
             align-items: center;
             padding: 60px 20px;
             text-align: center;
+            position: relative;
+            z-index: 10;
         }
 
         h1 { font-family: 'Dancing Script', cursive; font-size: 4.5rem; margin-bottom: 10px; }
@@ -157,6 +159,7 @@
             pointer-events: none;
             animation: float 5s linear infinite;
             font-size: 20px;
+            z-index: 999;
         }
 
         @keyframes float {
@@ -164,15 +167,71 @@
             100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
         }
 
+        /* --- NEW ADDITIONS: CONVEYOR BELT --- */
+        .conveyor-belt {
+            position: fixed;
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            z-index: 1;
+            display: none; /* Revealed by JS */
+            opacity: 0.6;
+        }
+        .belt-top { top: 10px; }
+        .belt-bottom { bottom: 80px; }
+
+        .track {
+            display: inline-flex;
+            animation: slide 40s linear infinite;
+        }
+        .track img {
+            height: 120px;
+            width: auto;
+            margin: 0 10px;
+            border: 4px solid white;
+            border-radius: 10px;
+        }
+        @keyframes slide {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        /* --- NEW ADDITIONS: VIDEO GALLERY --- */
+        .video-gallery {
+            display: none; /* Revealed by JS */
+            width: 90%;
+            max-width: 900px;
+            margin: 50px auto;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding-bottom: 100px;
+        }
+        .video-card {
+            background: white;
+            padding: 10px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .video-card video {
+            width: 100%;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
 
     <div id="cover-overlay" onclick="startEverything()">
         <div class="polaroid">
-            <img src="https://via.placeholder.com/300x350?text=Us+Forever" alt="Our Picture">
+            <img src="image/pic1.jpg" alt="Our Picture">
             <p>For Shone, My Everything</p>
             <small style="color: #888;">(Click to open)</small>
+        </div>
+    </div>
+
+    <div class="conveyor-belt belt-top" id="top-belt">
+        <div class="track">
+            <img src="image/pic1.jpg"><img src="image/pic2.jpg"><img src="image/pic3.jpg"><img src="image/pic4.jpg"><img src="image/pic5.jpg"><img src="image/pic6.jpg"><img src="image/pic7.jpg"><img src="image/pic8.jpg"><img src="image/pic9.jpg"><img src="image/pic10.jpg"><img src="image/pic11.jpg"><img src="image/pic12.jpg">
+            <img src="image/pic1.jpg"><img src="image/pic2.jpg"><img src="image/pic3.jpg"><img src="image/pic4.jpg"><img src="image/pic5.jpg"><img src="image/pic6.jpg"><img src="image/pic7.jpg"><img src="image/pic8.jpg"><img src="image/pic9.jpg"><img src="image/pic10.jpg"><img src="image/pic11.jpg"><img src="image/pic12.jpg">
         </div>
     </div>
 
@@ -199,8 +258,25 @@
             </div>
         </div>
 
+        <div class="video-gallery" id="vid-gallery">
+            <div class="video-card"><video src="video/vid1.mp4" controls></video></div>
+            <div class="video-card"><video src="video/vid2.mp4" controls></video></div>
+            <div class="video-card"><video src="video/vid3.mp4" controls></video></div>
+            <div class="video-card"><video src="video/vid4.mp4" controls></video></div>
+            <div class="video-card"><video src="video/vid5.mp4" controls></video></div>
+            <div class="video-card"><video src="video/vid6.mp4" controls></video></div>
+            <div class="video-card"><video src="video/vid7.mp4" controls></video></div>
+        </div>
+
         <div style="margin-top: 20px;">
             <p>Our Second Valentine's Day • 2026</p>
+        </div>
+    </div>
+
+    <div class="conveyor-belt belt-bottom" id="bottom-belt">
+        <div class="track" style="animation-direction: reverse;">
+            <img src="image/pic13.jpg"><img src="image/pic14.jpg"><img src="image/pic15.jpg"><img src="image/pic16.jpg"><img src="image/pic17.jpg"><img src="image/pic18.jpg"><img src="image/pic19.jpg"><img src="image/pic20.jpg"><img src="image/pic21.jpg"><img src="image/pic22.jpg"><img src="image/pic23.jpg"><img src="image/pic24.jpg">
+            <img src="image/pic13.jpg"><img src="image/pic14.jpg"><img src="image/pic15.jpg"><img src="image/pic16.jpg"><img src="image/pic17.jpg"><img src="image/pic18.jpg"><img src="image/pic19.jpg"><img src="image/pic20.jpg"><img src="image/pic21.jpg"><img src="image/pic22.jpg"><img src="image/pic23.jpg"><img src="image/pic24.jpg">
         </div>
     </div>
 
@@ -227,6 +303,11 @@
             document.getElementById('cover-overlay').classList.add('reveal-active');
             music.play();
             cd.style.animationPlayState = 'running';
+            
+            // NEW: Show conveyor belts and videos after clicking
+            document.getElementById('top-belt').style.display = 'block';
+            document.getElementById('bottom-belt').style.display = 'block';
+            document.getElementById('vid-gallery').style.display = 'grid';
         }
 
         // Music Control
